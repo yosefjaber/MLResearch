@@ -29,7 +29,7 @@ y_test  = torch.FloatTensor(y_test.values).to(device)
         
 model = MODEL().to(device)
 criterion = nn.MSELoss()
-optimizer = torch.optim.Adam(model.parameters(), lr=0.0001)
+optimizer = torch.optim.AdamW(model.parameters(), lr=0.00004)
 
 epochs = 200000
 losses =[]
