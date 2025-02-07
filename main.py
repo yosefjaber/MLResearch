@@ -29,9 +29,9 @@ y_test  = torch.FloatTensor(y_test.values).to(device)
         
 model = MODEL().to(device)
 criterion = nn.MSELoss()
-optimizer = torch.optim.AdamW(model.parameters(), lr=0.0001)
+optimizer = torch.optim.Adam(model.parameters(), lr=0.0001)
 
-epochs = 60000
+epochs = 200000
 losses =[]
 for epoch in range(epochs):
     #model.train()
@@ -49,7 +49,7 @@ for epoch in range(epochs):
     optimizer.step()
     
     # Print progress
-    if (epoch+1) % 20 == 0:
+    if (epoch+1) % 100 == 0:
         print(f"Epoch {epoch+1}/{epochs}, Loss = {loss.item():.4f}")
         
 plt.plot(range(epochs), losses)
