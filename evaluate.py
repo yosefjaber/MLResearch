@@ -28,7 +28,7 @@ y_test  = torch.FloatTensor(y_test.values).to(device)
 
 model = MODEL().to(device)
 
-model.load_state_dict(torch.load("model.pt"))
+model.load_state_dict(torch.load("goatModel0.74tarikModel3.pt".pt"))
 
 criterion = nn.MSELoss()
 
@@ -49,10 +49,10 @@ with torch.no_grad():
         #print(str(y_val.item()) + "F is the predicted data the real data is " + str(y_test[i].item()) + "F the difference between the actual and predicted " + str(y_test[i].item() - y_val.item()) + "F")
         
         if abs(((y_val.item() - y_test[i].item())*100)/(y_test[i].item())) >= 5:
-            print(str(y_val.item()) + "F is the predicted data the real data is " + str(y_test[i].item()) + "F the difference between the actual and predicted " + str(y_test[i].item() - y_val.item()) + "F")
+            print(str(y_val.item()) + "F is predicted & real is " + str(y_test[i].item()) + "F the difference between the actual and predicted " + str(y_test[i].item() - y_val.item()) + "F")
             withinFivePercent+=1        
         if abs(((y_val.item() - y_test[i].item())*100)/(y_test[i].item())) >= 1:
-            print(str(y_val.item()) + "F is the predicted data the real data is " + str(y_test[i].item()) + "F the difference between the actual and predicted " + str(y_test[i].item() - y_val.item()) + "F")
+            print("predicted: " + str(y_val.item()) + "F, real: " + str(y_test[i].item()) + "F the difference between actual and predicted " + str(y_test[i].item() - y_val.item()) + "F")
             withinOnePercent+=1    
 print("Training data amount: " + str(amount))
 print(str(withinFivePercent) + " is outside of 5% (" + str(withinFivePercent*100/amount) + "%)")
