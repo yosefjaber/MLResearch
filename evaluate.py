@@ -28,7 +28,7 @@ y_test  = torch.FloatTensor(y_test.values).to(device)
 
 model = MODEL().to(device)
 
-model.load_state_dict(torch.load("goatModel0.74tarikModel3.pt".pt"))
+model.load_state_dict(torch.load("model.pt"))
 
 criterion = nn.MSELoss()
 
