@@ -3,7 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 class minimodel(nn.Module):
-    def __init__(self, in_features=4, h1=400, h2=8000, h3=400, out_features=1):
+    def __init__(self, in_features=4, h1=120, h2=120, h3=120, out_features=1):
         super().__init__()
         self.fc1 = nn.Linear(in_features, h1)  
         self.fc2 = nn.Linear(h1, h2)  

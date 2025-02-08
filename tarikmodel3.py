@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-NODES = 256
+NODES = 512
 
 class tarikModel3(nn.Module):
     def __init__(self, in_features=4, h1=NODES, h2=NODES, h3=NODES, h4=NODES, h5=NODES, h6=NODES, h7=NODES, h8=NODES, h9=NODES, h10=NODES, h11=NODES, h12=NODES, h13=NODES, h14=NODES, h15=NODES, h16=NODES,out_features=1):
