@@ -5,11 +5,6 @@ from sklearn.model_selection import train_test_split
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from basicmodel import basicModel
-from intermediatemodel import intermediateModel
-from tarikmodel import tarikModel
-from tarikmodel2 import tarikModel2
-from tarikmodel3 import tarikModel3
 from constants import MODEL
 
 #Use GPU if available 
@@ -29,9 +24,9 @@ y_test  = torch.FloatTensor(y_test.values).to(device)
         
 model = MODEL().to(device)
 criterion = nn.MSELoss()
-optimizer = torch.optim.AdamW(model.parameters(), lr=0.00004)
+optimizer = torch.optim.AdamW(model.parameters(), lr=0.0005) #use 0.00005
 
-epochs = 200000
+epochs = 40_000 #Use 500_000
 losses =[]
 for epoch in range(epochs):
     #model.train()
@@ -49,7 +44,7 @@ for epoch in range(epochs):
     optimizer.step()
     
     # Print progress
-    if (epoch+1) % 100 == 0:
+    if (epoch+1) % 10 == 0:
         print(f"Epoch {epoch+1}/{epochs}, Loss = {loss.item():.4f}")
         
 plt.plot(range(epochs), losses)
