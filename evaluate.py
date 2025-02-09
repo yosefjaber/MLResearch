@@ -4,22 +4,7 @@ import torch.nn.functional as F
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from constants import MODEL
-
-#Use GPU if available 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-print("Using device:", device)
-
-X_train = pd.read_csv("data/X_train.csv")
-X_test = pd.read_csv("data/X_test.csv")
-y_train = pd.read_csv("data/y_train.csv")
-y_test = pd.read_csv("data/y_test.csv")
-
-#Convert X and y features to float tensors
-X_train = torch.FloatTensor(X_train.values).to(device)
-X_test  = torch.FloatTensor(X_test.values).to(device)
-y_train = torch.FloatTensor(y_train.values).to(device)
-y_test  = torch.FloatTensor(y_test.values).to(device)
+import gc
 
 def plot_actual_vs_predicted(y_test, y_pred):
     plt.figure(figsize=(8, 6))
@@ -41,8 +26,23 @@ def plot_actual_vs_predicted(y_test, y_pred):
 
 
 
-def eval_model(modelName, graph):
-    model = MODEL().to(device)
+def eval_model(model, modelName, graph=False):
+    #Use GPU if available 
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print("Using device:", device)
+    
+    X_train = pd.read_csv("data/X_train.csv")
+    X_test = pd.read_csv("data/X_test.csv")
+    y_train = pd.read_csv("data/y_train.csv")
+    y_test = pd.read_csv("data/y_test.csv")
+    
+    #Convert X and y features to float tensors
+    X_train = torch.FloatTensor(X_train.values).to(device)
+    X_test  = torch.FloatTensor(X_test.values).to(device)
+    y_train = torch.FloatTensor(y_train.values).to(device)
+    y_test  = torch.FloatTensor(y_test.values).to(device)
+    
+    model = model.to(device)
     model.load_state_dict(torch.load(modelName))
     
     criterion = nn.MSELoss()
@@ -50,6 +50,7 @@ def eval_model(modelName, graph):
     outsideOnePercent = 0
     amount = X_test.shape[0]
     
+    model.eval()
     with torch.no_grad():
         y_pred = model(X_test) #Predict the data by passing in the Test data through the model it will return a one column tensor
         loss = criterion(y_pred, y_test)
@@ -79,10 +80,25 @@ def eval_model(modelName, graph):
     print(str(outsideOnePercent) + " is outside of 1% (" + str(outsideOnePercent*100/amount) + "%)")
     print(str(loss.item()) + " is the MSE")
     print(str(r2.item()) + " is the r^2")
+    model.train()
     
     if graph:
         plot_actual_vs_predicted(y_test, y_pred)
+        
+    lines = [
+        f"R^2: {r2.item()}.\n",
+        f"MSE: {loss.item()}.\n",
+    ]
     
-if __name__ == "__main__":
-    evalModel("tarikModel3-512-58.pt")
+    with open(f"results/{modelName}.txt", "w") as file:
+        file.writelines(lines)
+        
+    X_train = X_train.cpu()
+    X_test = X_test.cpu()
+    y_train = y_train.cpu()
+    y_test = y_test.cpu()
+    model = model.cpu()
+    del X_train, X_test, y_train, y_test, model, criterion, y_pred
+    torch.cuda.empty_cache()
+    gc.collect()
 
