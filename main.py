@@ -1,7 +1,6 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from sklearn.model_selection import train_test_split
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -9,7 +8,7 @@ from constants import MODEL
 
 #Use GPU if available 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-print("Using device:", device)
+print("Using (main) device:", device)
 
 X_train = pd.read_csv("data/X_train.csv")
 X_test = pd.read_csv("data/X_test.csv")
