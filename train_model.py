@@ -10,7 +10,7 @@ import gc
 def train_model(model, learning_rate, optimizer, epochs, out_path, momentum = 0.7):
     #Use GPU if available 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    # print("Using device:", device)
+    print("Using device:", device)
     
     X_train = pd.read_csv("data/X_train.csv")
     X_test = pd.read_csv("data/X_test.csv")
@@ -24,7 +24,7 @@ def train_model(model, learning_rate, optimizer, epochs, out_path, momentum = 0.
     y_test  = torch.FloatTensor(y_test.values).to(device)
     
     model = model.to(device)
-    print("Model pushed to GPU")
+    print("Model pushed to " + str(device))
     
     criterion = nn.MSELoss()
     if optimizer == "Adam":
@@ -37,9 +37,9 @@ def train_model(model, learning_rate, optimizer, epochs, out_path, momentum = 0.
         raise ValueError("Unsupported optimizer. Choose 'Adam', or 'AdamW'.")
     
     losses =[]
+    model.train()
+    
     for epoch in range(epochs):
-        model.train()
-        
         # Forward pass
         y_pred = model(X_train)
         
