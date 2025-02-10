@@ -41,8 +41,8 @@ import gc
 
 # test_block = create_model(4,[4096,4096,4096,4096,4096,4096,4096,4096,4096,4096,4096,4096,4096,4096,4096,4096],1)
 
-test_block = create_model(4,[1024 for _ in range(18)],1)
-train_model(test_block, 0.00001, "AdamW", 1000, "test_block.pt") #Use 500_000 lr = 0.00001
+test_block = create_model(4,[1024 for i in range(18)],1)
+train_model(test_block, 0.000005, "AdamW", 500_000, "test_block.pt") #Use 500_000 lr = 0.000005
 eval_model(test_block,"test_block.pt", True)
 del test_block
 gc.collect()
