@@ -39,11 +39,10 @@ import gc
 # eval_model("testWeights.pt", False)
 
 
-# test_block = create_model(4,[4096,4096,4096,4096,4096,4096,4096,4096,4096,4096,4096,4096,4096,4096,4096,4096],1)
+# test_block = create_model(4,[1024,1024,1024,1024,1024,1024,1024,1024,1024,1024,1024,1024,1024,1024,1024,1024,1024,1024],1)
 
-test_block = create_model(4,[1024 for i in range(18)],1)
-train_model(test_block, 0.000005, "AdamW", 500_000, "test_block.pt") #Use 500_000 lr = 0.000005
-eval_model(test_block,"test_block.pt", True)
-del test_block
-gc.collect()
+test_blockRAM = create_model(4,[100 for i in range(5)],1)
+#train_model(test_blockRAM, 0.0001, "AdamW", 450_000, "test_blockRAM.pt") #Use 600_000 lr = 0.000004 2.1
+train_model(test_blockRAM, 0.00005, "Adam", 50_000, "test_blockRAM.pt")
+eval_model(test_blockRAM,"test_blockRAM.pt", False)
 torch.cuda.empty_cache()

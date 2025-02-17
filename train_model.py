@@ -11,6 +11,7 @@ def train_model(model, learning_rate, optimizer, epochs, out_path, momentum = 0.
     #Use GPU if available 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print("Using device:", device)
+    torch.set_float32_matmul_precision("high")
     
     X_train = pd.read_csv("data/X_train.csv")
     X_test = pd.read_csv("data/X_test.csv")
@@ -24,6 +25,7 @@ def train_model(model, learning_rate, optimizer, epochs, out_path, momentum = 0.
     y_test  = torch.FloatTensor(y_test.values).to(device)
     
     model = model.to(device)
+    model = torch.compile(model)
     print("Model pushed to " + str(device))
     
     criterion = nn.MSELoss()
@@ -53,7 +55,7 @@ def train_model(model, learning_rate, optimizer, epochs, out_path, momentum = 0.
         optimizer.step()
         
         # Print progress
-        if (epoch+1) % 50 == 0:
+        if (epoch+1) % 100 == 0:
             print(f"Epoch {epoch+1}/{epochs}, Loss = {loss.item():.4f}")
             
     plt.plot(range(epochs), losses)
