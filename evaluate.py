@@ -43,7 +43,21 @@ def eval_model(model, modelName, graph=False):
     y_test  = torch.FloatTensor(y_test.values).to(device)
     
     model = model.to(device)
+    model = torch.compile(model)
     model.load_state_dict(torch.load(modelName))
+    
+    # state_dict = torch.load(modelName)
+    # from collections import OrderedDict
+    
+    
+    # new_state_dict = OrderedDict()
+    # for k, v in state_dict.items():
+    #     # Remove the prefix from the key
+    #     new_key = k.replace('_orig_mod.', '')
+    #     new_state_dict[new_key] = v
+    
+    # model.load_state_dict(new_state_dict)
+    
     
     criterion = nn.MSELoss()
     outsideFivePercent = 0
