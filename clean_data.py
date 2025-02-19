@@ -39,7 +39,6 @@ def clean_row_off_tolorence(df,name_of_row,tolerance,values_to_drop):
 
 values_to_drop = clean_row_off_tolorence(clean, "AHU-01 VAV : Hot  Water Coil Flow Meter Local (gpm)", 0.50, values_to_drop)
 values_to_drop = clean_row_off_tolorence(clean, "AHU-01 VAV : Supply Fan Air Flow Local (cfm)", 250, values_to_drop)
-#values_to_drop = clean_row_off_condition(clean, "AHU-01 VAV : Hot  Water Coil Flow Meter Local (gpm)",lambda x : x == 0, values_to_drop)
 values_to_drop = clean_row_off_condition(clean, "Hot Water System : Hot Water Supply Temperature Local (°F)",lambda x : x < 100, values_to_drop)
 
 clean = clean.drop(values_to_drop)
@@ -51,6 +50,6 @@ sum = 0
 for i in range(len(clean["Hot Water System : Hot Water Supply Temperature Local (°F)"])):
     sum += float(clean["Hot Water System : Hot Water Supply Temperature Local (°F)"].iloc[i])
 print(sum/len(clean["Hot Water System : Hot Water Supply Temperature Local (°F)"]))
-#clean.to_csv('data/clean-data.csv', index=False)
+clean.to_csv('data/clean-data.csv', index=False)
 
 #Delete anything below 100T of in water, also remove delta of 0.5 gpm, remove deltas of 250cfm, remove 2 goofy points
