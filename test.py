@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from evaluate import eval_model
+from tarikmodel3 import tarikModel3
 from train_model import train_model
 from create_model import create_model
 import gc
@@ -40,9 +41,9 @@ import gc
 
 
 # test_block = create_model(4,[1024,1024,1024,1024,1024,1024,1024,1024,1024,1024,1024,1024,1024,1024,1024,1024,1024,1024],1)
-
-test_blockRAM = create_model(4,[1024 for i in range(18)],1)
+#tarik_model3 = create_model(4,[512 for i in range(16)],1)
+#test_blockRAM = create_model(4,[1024 for i in range(18)],1)
 #train_model(test_blockRAM, 0.0001, "AdamW", 450_000, "test_blockRAM.pt") #Use 600_000 lr = 0.000004 2.1
-train_model(test_blockRAM, 0.000003, "AdamW", 550_000, "test_blockRAM.pt")
-eval_model(test_blockRAM,"test_blockRAM.pt", True)
+#train_model(test_blockRAM, 0.000001, "AdamW", 550_000, "test_blockRAM.pt")
+eval_model(tarikModel3(),"tarikModel3-512-58.pt", True)
 torch.cuda.empty_cache()
