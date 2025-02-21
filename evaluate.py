@@ -43,8 +43,8 @@ def eval_model(model, modelName, graph=False):
     y_test  = torch.FloatTensor(y_test.values).to(device)
     
     model = model.to(device)
-    model.load_state_dict(torch.load(modelName))
     model = torch.compile(model)
+    model.load_state_dict(torch.load(modelName))
     
     # state_dict = torch.load(modelName)
     # from collections import OrderedDict

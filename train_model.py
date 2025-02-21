@@ -38,7 +38,8 @@ def train_model(model, learning_rate, optimizer, epochs, out_path, momentum = 0.
     else:
         raise ValueError("Unsupported optimizer. Choose 'Adam', or 'AdamW'.")
     
-    losses =[]
+    #remove comments to plot traning data
+    #losses =[]
     model.train()
     
     for epoch in range(epochs):
@@ -47,7 +48,7 @@ def train_model(model, learning_rate, optimizer, epochs, out_path, momentum = 0.
         
         # Compute loss
         loss = criterion(y_pred, y_train)
-        losses.append(loss.item())  # Convert tensor to float
+        #losses.append(loss.item())  # Convert tensor to float
         
         # Backprop and update
         optimizer.zero_grad()
@@ -58,9 +59,9 @@ def train_model(model, learning_rate, optimizer, epochs, out_path, momentum = 0.
         if (epoch+1) % 100 == 0:
             print(f"Epoch {epoch+1}/{epochs}, Loss = {loss.item():.4f}")
             
-    plt.plot(range(epochs), losses)
-    plt.ylabel("loss/error")
-    plt.xlabel('Epoch')
+    # plt.plot(range(epochs), losses)
+    # plt.ylabel("loss/error")
+    # plt.xlabel('Epoch')
     # plt.show()
     
     #Save the Model
