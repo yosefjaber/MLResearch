@@ -60,6 +60,7 @@ def eval_model(model, modelName, graph=False):
     
     
     criterion = nn.MSELoss()
+    mae_criterion = nn.L1Loss()
     outsideFivePercent = 0
     outsideOnePercent = 0
     amount = X_test.shape[0]
@@ -68,6 +69,7 @@ def eval_model(model, modelName, graph=False):
     with torch.no_grad():
         y_pred = model(X_test) #Predict the data by passing in the Test data through the model it will return a one column tensor
         loss = criterion(y_pred, y_test)
+        mae_loss = mae_criterion(y_pred, y_test)
         y_mean = torch.mean(y_test)
         ss_tot = torch.sum((y_test - y_mean) ** 2)
         ss_res = torch.sum((y_test - y_pred) ** 2)
@@ -83,9 +85,10 @@ def eval_model(model, modelName, graph=False):
     
             
             #Difference is actual - predicted
-            print(f"Actual: {actualRow}, Predicted: {predictedRow}, Diff: {actualRow-predictedRow}, PercentageDiff: {percentDiff}")
+            #print(f"Actual: {actualRow}, Predicted: {predictedRow}, Diff: {actualRow-predictedRow}, PercentageDiff: {percentDiff}")
             if percentDiff >= 5:
                 outsideFivePercent+=1
+                print(f"Actual: {actualRow}, Predicted: {predictedRow}, Diff: {actualRow-predictedRow}, PercentageDiff: {percentDiff}, i: {i}, next: {y_test[i+1].item()}")
             if percentDiff >= 1:
                 outsideOnePercent+=1
     
@@ -94,6 +97,7 @@ def eval_model(model, modelName, graph=False):
     print(str(outsideOnePercent) + " is outside of 1% (" + str(outsideOnePercent*100/amount) + "%)")
     print(str(loss.item()) + " is the MSE")
     print(str(r2.item()) + " is the r^2")
+    print(str(mae_loss.item()) + " is the MAE")
     model.train()
     
     if graph:
