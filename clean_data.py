@@ -33,14 +33,11 @@ def clean_row_off_tolorence(df,name_of_row,tolerance,values_to_drop):
             #print(f"{float(df_row.iloc[i])} is i, {float(df_row.iloc[i-1])} is i - 1, diff is {abs(float(df_row.iloc[i-1])-float(df_row.iloc[i]))}")
     return values_to_drop
 
-#
-
-# values_to_drop = clean_row_off_condition(clean, "Hot Water System : Hot Water Supply Temperature Local (°F)",lambda x : x < 115, values_to_drop)
-
 values_to_drop = clean_row_off_tolorence(clean, "AHU-01 VAV : Hot  Water Coil Flow Meter Local (gpm)", 0.50, values_to_drop)
 values_to_drop = clean_row_off_tolorence(clean, "AHU-01 VAV : Supply Fan Air Flow Local (cfm)", 250, values_to_drop)
 values_to_drop = clean_row_off_condition(clean, "Hot Water System : Hot Water Supply Temperature Local (°F)",lambda x : x < 100, values_to_drop)
 
+values_to_drop = list(set(values_to_drop))
 clean = clean.drop(values_to_drop)
 
 print(clean)
