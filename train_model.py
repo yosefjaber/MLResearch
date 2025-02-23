@@ -72,6 +72,6 @@ def train_model(model, learning_rate, optimizer, epochs, out_path, momentum = 0.
     y_train = y_train.cpu()
     y_test = y_test.cpu()
     model = model.cpu()
-    del X_train, X_test, y_train, y_test, model, optimizer, criterion, losses, loss, y_pred
+    del X_train, X_test, y_train, y_test, model, optimizer, criterion, loss, y_pred
     torch.cuda.empty_cache()
     gc.collect()
