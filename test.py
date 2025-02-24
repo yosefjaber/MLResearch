@@ -13,13 +13,13 @@ import gc
 # small_diamond = create_model(4,[8,16,32,16,4],1)
 # small_block = create_model(4,[16384,16384,16384,16384,16384],1)
 
-#10 layers
+#11 layers
 # medium_left_pyramid = create_model(4,[8,16,32,64,128,256,512,1024,2048,4096],1)
 #medium_right_pyramid = create_model(4,[4096,2048,1024,512,256,128,64,32,16,8],1)
 # medium_diamond = create_model(4,[8,16,32,64,128,256,64,32,16,8],1)
 # medium_block = create_model(4,[16384,16384,16384,16384,16384,16384,16384,16384,16384,16384],1)
 
-#14 layers
+#17 layers
 #
 # large_left_pyramid = create_model(4,[8,16,32,64,128,256,512,1024,2048,4096,8192,16384,32768,65536],1)
 
@@ -40,11 +40,10 @@ import gc
 # eval_model("testWeights.pt", False)
 
 
-test_blockRAM = create_model(4,[1024 for i in range(18)],1)
+test_blockRAM = create_model(4,[1024 for _ in range(18)],1)
 
 #train_model(test_blockRAM, 0.0001, "AdamW", 450_000, "test_blockRAM.pt") #Use 600_000 lr = 0.000004 2.1
-#train_model(test_blockRAM2, 0.000001, "Adam", 450_000, "test_blockRAM2.pt")
-#train_model(random, 3e-4, "AdamW", 30_000, "random.pt")
+train_model(test_blockRAM, 0.0000001, "AdamW", 550_000, "test_blockRAM.pt")
 eval_model(test_blockRAM,"test_blockRAM.pt", True)
 torch.cuda.empty_cache()
 
