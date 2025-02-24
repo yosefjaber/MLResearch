@@ -28,8 +28,10 @@ def clean_row_off_tolorence(df,name_of_row,tolerance,values_to_drop):
     
     for i in range(len(df_row)):
         if i > 0 and abs(float(df_row.iloc[i-1])-float(df_row.iloc[i])) >= tolerance:
+            values_to_drop.append(i-2)
             values_to_drop.append(i-1)
             values_to_drop.append(i)
+            values_to_drop.append(i+1)
             #print(f"{float(df_row.iloc[i])} is i, {float(df_row.iloc[i-1])} is i - 1, diff is {abs(float(df_row.iloc[i-1])-float(df_row.iloc[i]))}")
     return values_to_drop
 
@@ -38,15 +40,12 @@ values_to_drop = clean_row_off_tolorence(clean, "AHU-01 VAV : Supply Fan Air Flo
 values_to_drop = clean_row_off_condition(clean, "Hot Water System : Hot Water Supply Temperature Local (°F)",lambda x : x < 100, values_to_drop)
 
 values_to_drop = list(set(values_to_drop))
+values_to_drop = [i for i in values_to_drop if 0 <= i < len(clean)]
 clean = clean.drop(values_to_drop)
 
 print(clean)
 after = len(clean)
 print(f"Change: {before - after}")
-sum = 0
-for i in range(len(clean["Hot Water System : Hot Water Supply Temperature Local (°F)"])):
-    sum += float(clean["Hot Water System : Hot Water Supply Temperature Local (°F)"].iloc[i])
-print(sum/len(clean["Hot Water System : Hot Water Supply Temperature Local (°F)"]))
 clean.to_csv('data/clean-data.csv', index=False)
 
 #Delete anything below 100T of in water, also remove delta of 0.5 gpm, remove deltas of 250cfm, remove 2 goofy points
