@@ -90,8 +90,7 @@ def eval_model(model, modelName, graph=False):
                 outsideFivePercent+=1
             if percentDiff >= 1:
                 outsideOnePercent+=1
-            if percentDiff >= 10:
-                print(f"Actual: {actualRow}, Predicted: {predictedRow}, Diff: {actualRow-predictedRow}, PercentageDiff: {percentDiff}, i: {i}, next: {y_test[i+1].item()}, real: {X_test[i]}")
+            print(f"Actual: {actualRow}, Predicted: {predictedRow}, Diff: {actualRow-predictedRow}, PercentageDiff: {percentDiff}, i: {i}, real: {X_test[i]}")
     
     print(f"Traning Data Amount: {amount}")
     print(str(outsideFivePercent) + " is outside of 5% (" + str(outsideFivePercent*100/amount) + "%)")
