@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from torch.optim import SGD, Adam, AdamW
 import gc
 
-def train_model(model, learning_rate, optimizer, epochs, out_path, momentum = 0.7):
+def train_model(model, learning_rate, optimizer, epochs, out_path, batch_size = 32, momentum = 0.7):
     #Use GPU if available 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print("Using device:", device)

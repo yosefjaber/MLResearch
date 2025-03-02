@@ -43,7 +43,7 @@ import gc
 test_blockRAM = create_model(4,[1024 for _ in range(18)],1)
 
 #train_model(test_blockRAM, 0.0001, "AdamW", 450_000, "test_blockRAM.pt") #Use 600_000 lr = 0.000004 2.1
-train_model(test_blockRAM, 0.0000001, "AdamW", 550_000, "test_blockRAM.pt")
+#train_model(test_blockRAM, 0.0000001, "AdamW", 550_000, "test_blockRAM.pt")
 eval_model(test_blockRAM,"test_blockRAM.pt", True)
 torch.cuda.empty_cache()
 
