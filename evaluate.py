@@ -104,6 +104,7 @@ def eval_model(model, modelName, graph=False):
         plot_actual_vs_predicted(y_test, y_pred)
         
     lines = [
+        f"Model: {modelName}"
         f"R^2: {r2.item()}.\n",
         f"MSE: {loss.item()}.\n",
     ]

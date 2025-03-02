@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from torch.utils.data import DataLoader, TensorDataset
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -24,6 +25,10 @@ def train_model(model, learning_rate, optimizer, epochs, out_path, batch_size = 
     y_train = torch.FloatTensor(y_train.values).to(device)
     y_test  = torch.FloatTensor(y_test.values).to(device)
     
+    train_dataset = torch.utils.data.TensorDataset(X_train, y_train)
+    train_loader = torch.utils.data.DataLoader(dataset = train_dataset, batch_size = batch_size, shuffle = True)
+    
+    
     model = model.to(device)
     model = torch.compile(model)
     print("Model pushed to " + str(device))
@@ -43,21 +48,28 @@ def train_model(model, learning_rate, optimizer, epochs, out_path, batch_size = 
     model.train()
     
     for epoch in range(epochs):
-        # Forward pass
-        y_pred = model(X_train)
+        epoch_loss = 0.0
+        batch_count = 0
         
-        # Compute loss
-        loss = criterion(y_pred, y_train)
-        #losses.append(loss.item())  # Convert tensor to float
+        for X_batch, y_batch in train_loader:
+            y_pred = model(X_batch)
+            
+            loss = criterion(y_pred, y_batch)
+            epoch_loss += loss.item()
+            batch_count += 1
+            
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+            
+            # if(batch_count % 100 == 0):
+            #     print(f"Batch Epoch Average: {epoch_loss/batch_count}, Batch Count: {batch_count}, Current Running Total Loss: {epoch_loss},")
         
-        # Backprop and update
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
+        avg_epoch_loss = epoch_loss / batch_count
         
         # Print progress
-        if (epoch+1) % 100 == 0:
-            print(f"Epoch {epoch+1}/{epochs}, Loss = {loss.item():.4f}")
+        if (epoch+1) % 10 == 0:
+            print(f"Epoch {epoch+1}/{epochs}, Loss: {avg_epoch_loss:.4f}")
             
     # plt.plot(range(epochs), losses)
     # plt.ylabel("loss/error")
