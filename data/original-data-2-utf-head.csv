@@ -1,4 +1,4 @@
-Date,Time,Time Zone,AHU-01 VAV : Discharge Air Temperature (°F),AHU-01 VAV : Total Discharge Airflow (cfm),Hot Water System : Hot Water Supply Temperature Local (°F),AHU-01 VAV : Hot  Water Coil Flow Meter Local (gpm),AHU-01 VAV : Mixed Air Temperature Local (°F)
+Date,Time,Time Zone,Discharge Temp(F),Air Flow(cfm),Water Temp(F),Water Flow Rate(gpm),Intake Air Temp(F)
 24-Feb-25,8:55:00 AM,America/Detroit,65.8,854.7,120.8,0.6,46.7
 24-Feb-25,8:54:00 AM,America/Detroit,65.6,847.4,120.3,0.6,47.1
 24-Feb-25,8:53:00 AM,America/Detroit,65.1,846.7,120.6,0.6,45.9
