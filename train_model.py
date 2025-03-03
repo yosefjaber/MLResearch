@@ -62,8 +62,8 @@ def train_model(model, learning_rate, optimizer, epochs, out_path, batch_size = 
             loss.backward()
             optimizer.step()
             
-            # if(batch_count % 100 == 0):
-            #     print(f"Batch Epoch Average: {epoch_loss/batch_count}, Batch Count: {batch_count}, Current Running Total Loss: {epoch_loss},")
+            if(batch_count % 100 == 0):
+                print(f"Batch Epoch Average: {epoch_loss/batch_count}, Batch Count: {batch_count}, Current Running Total Loss: {epoch_loss},")
         
         avg_epoch_loss = epoch_loss / batch_count
         
