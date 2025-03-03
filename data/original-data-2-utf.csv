@@ -1,4 +1,4 @@
-AHU-01 VAV : Discharge Air Temperature (°F),Hot Water System : Hot Water Supply Temperature Local (°F),AHU-01 VAV : Hot  Water Coil Flow Meter Local (gpm),AHU-01 VAV : Mixed Air Temperature Local (°F),AHU-01 VAV : Total Discharge Airflow (cfm)
+Discharge Temp(F),Water Temp(F),Water Flow Rate(gpm),Intake Air Temp(F),Air Flow(cfm)
 65.8,120.8,0.6,46.7,854.7
 65.6,120.3,0.6,47.1,847.4
 65.1,120.6,0.6,45.9,846.7
