@@ -5,8 +5,8 @@ import pandas as pd
 data = pd.read_csv("data/clean-data.csv")
 
 #Create a X and y set
-X = data.drop(columns=["AHU-01 VAV : Discharge Air Temperature (°F)"])
-y = data["AHU-01 VAV : Discharge Air Temperature (°F)"]
+X = data.drop(columns=["Discharge Temp(F)"])
+y = data["Discharge Temp(F)"]
 
 #Create the test and train sets
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2)
