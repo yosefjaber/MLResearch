@@ -63,7 +63,7 @@ def train_model(model, learning_rate, optimizer, epochs, out_path, batch_size = 
             optimizer.step()
             
             if(batch_count % 200 == 0):
-                print(f"Batch Epoch Average: {epoch_loss/batch_count}, Batch Count: {batch_count}, Current Running Total Loss: {epoch_loss},")
+                print(f"Batch Epoch Average: {epoch_loss/batch_count}, Batch Count: {batch_count}, Model: {out_path}")
         
         avg_epoch_loss = epoch_loss / batch_count
         
