@@ -62,12 +62,4 @@ clean_2 = clean_data(original_2)
 clean = pd.concat([clean_1,clean_2])
 clean.to_csv('data/clean-data.csv', index=False)
 
-    
-# clean = clean_data(original)
-
-# print(clean)
-# after = len(clean)
-# print(f"Change: {before - after}")
-# clean.to_csv('data/clean-data.csv', index=False)
-
 # #Delete anything below 100T of in water, also remove delta of 0.5 gpm, remove deltas of 250cfm, remove 2 goofy points

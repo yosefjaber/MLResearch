@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 from torch.optim import SGD, Adam, AdamW
 import gc
 
-def train_model(model, learning_rate, optimizer, epochs, out_path, batch_size = 32, momentum = 0.7):
+def train_model(model, learning_rate, optimizer, epochs, out_path, batch_size = 32, momentum = 0.9):
     #Use GPU if available 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print("Using device:", device)
@@ -39,7 +39,7 @@ def train_model(model, learning_rate, optimizer, epochs, out_path, batch_size = 
     elif optimizer == "AdamW":
         optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate) 
     elif optimizer == "SGD":
-        optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate, momentum=0.7)
+        optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate, momentum=momentum)
     else:
         raise ValueError("Unsupported optimizer. Choose 'Adam', or 'AdamW'.")
     
@@ -62,7 +62,7 @@ def train_model(model, learning_rate, optimizer, epochs, out_path, batch_size = 
             loss.backward()
             optimizer.step()
             
-            if(batch_count % 100 == 0):
+            if(batch_count % 200 == 0):
                 print(f"Batch Epoch Average: {epoch_loss/batch_count}, Batch Count: {batch_count}, Current Running Total Loss: {epoch_loss},")
         
         avg_epoch_loss = epoch_loss / batch_count
@@ -77,7 +77,7 @@ def train_model(model, learning_rate, optimizer, epochs, out_path, batch_size = 
     # plt.show()
     
     #Save the Model
-    torch.save(model.state_dict(), out_path)
+    torch.save(model.state_dict(), f"models/{out_path}")
     
     X_train = X_train.cpu()
     X_test = X_test.cpu()
