@@ -5,46 +5,14 @@ from evaluate import eval_model
 from tarikmodel3 import tarikModel3
 from train_model import train_model
 from create_model import create_model
+from experiment import run_experiment
 import gc
-
-#5 layers
-# small_left_pyramid = create_model(4,[8,16,32,64,128],1)
-# small_right_pyramid = create_model(4,[128,64,32,16,8],1)
-# small_diamond = create_model(4,[8,16,32,16,4],1)
-# small_block = create_model(4,[16384,16384,16384,16384,16384],1)
-
-#11 layers
-# medium_left_pyramid = create_model(4,[8,16,32,64,128,256,512,1024,2048,4096],1)
-#medium_right_pyramid = create_model(4,[4096,2048,1024,512,256,128,64,32,16,8],1)
-# medium_diamond = create_model(4,[8,16,32,64,128,256,64,32,16,8],1)
-# medium_block = create_model(4,[16384,16384,16384,16384,16384,16384,16384,16384,16384,16384],1)
-
-#17 layers
-#
-# large_left_pyramid = create_model(4,[8,16,32,64,128,256,512,1024,2048,4096,8192,16384,32768,65536],1)
-
-# test_model(large_left_pyramid, 0.001, "AdamW", 600, "testWeights.pt")
-# eval_model("testWeights.pt", False)
-# del large_left_pyramid
-# gc.collect()
-# torch.cuda.empty_cache()
-
-# large_left_pyramid = create_model(4,[8,16,32,64,128,256,512,1024,2048,4096,8192,16384,32768,65536],1)
-# large_right_pyramid = create_model(4,[65536,32768,16384,8192,4096,2048,1024,512,256,128,64,32,16,8],1)
-# large_diamond = create_model(4,[8,16,32,64,128,256,512,512,256,128,64,32,16,8],1)
-#large_block = create_model(4,[16384,16384,16384,16384,16384,16384,16384,16384,16384,16384,16384,16384,16384,16384,16384,16384],1)
-#massive_block = create_model(4,[4096,4096,4096,4096,4096,4096,4096,4096,4096,4096,4096,4096,4096,4096,4096,4096],1)
-
-
-# test_model(large_block, 0.001, "AdamW", 600, "testWeights.pt")
-# eval_model("testWeights.pt", False)
-
 
 bruh = create_model(4,[1024 for _ in range(18)],1)
 
-#train_model(test_blockRAM, 0.0001, "AdamW", 450_000, "test_blockRAM.pt") #Use 600_000 lr = 0.000004 2.1
-train_model(bruh, 0.0002, "AdamW", 100, "bruh.pt")
-eval_model(bruh,"bruh.pt", True)
-torch.cuda.empty_cache()
+# #train_model(test_blockRAM, 0.0001, "AdamW", 450_000, "test_blockRAM.pt") #Use 600_000 lr = 0.000004 2.1
+# train_model(bruh, 1e-5, "SGD", 100, "bruh.pt", momentum=0.7)
+# eval_model(bruh,"bruh.pt", True)
+# torch.cuda.empty_cache()
 
-
+run_experiment("bruh.pt", bruh, 0.001,"AdamW", 10)
