@@ -44,7 +44,7 @@ def eval_model(model, modelName, graph=False):
     
     model = model.to(device)
     model = torch.compile(model)
-    model.load_state_dict(torch.load(modelName))
+    model.load_state_dict(torch.load(f"models/{modelName}"))
     
     criterion = nn.MSELoss()
     mae_criterion = nn.L1Loss()
