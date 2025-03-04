@@ -22,7 +22,7 @@ def clean_row_off_condition(df, name_of_row, func, values_to_drop):
         # Use positional indexing with .iloc
         if i > 0 and func(float(df_row.iloc[i])):
             values_to_drop.append(i)
-            #print(df_row.iloc[i])
+            print(df_row.iloc[i])
         
     return values_to_drop
 
@@ -35,7 +35,7 @@ def clean_row_off_tolorence(df,name_of_row,tolerance,values_to_drop):
             values_to_drop.append(i-1)
             values_to_drop.append(i)
             values_to_drop.append(i+1)
-            #print(f"{float(df_row.iloc[i])} is i, {float(df_row.iloc[i-1])} is i - 1, diff is {abs(float(df_row.iloc[i-1])-float(df_row.iloc[i]))}")
+            print(f"{float(df_row.iloc[i])} is i, {float(df_row.iloc[i-1])} is i - 1, diff is {abs(float(df_row.iloc[i-1])-float(df_row.iloc[i]))}, i: {i}")
     return values_to_drop
 
 #Expects a dataframe and cleans it according to research specifications and returns the clean dataframe
@@ -60,6 +60,6 @@ def clean_data(df):
 clean_1 = clean_data(original_1)
 clean_2 = clean_data(original_2)
 clean = pd.concat([clean_1,clean_2])
-clean.to_csv('data/clean-data.csv', index=False)
+clean.to_csv('data/clean-data-temp.csv', index=False)
 
 # #Delete anything below 100T of in water, also remove delta of 0.5 gpm, remove deltas of 250cfm, remove 2 goofy points
