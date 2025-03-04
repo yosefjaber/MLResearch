@@ -46,19 +46,6 @@ def eval_model(model, modelName, graph=False):
     model = torch.compile(model)
     model.load_state_dict(torch.load(modelName))
     
-    # state_dict = torch.load(modelName)
-    # from collections import OrderedDict
-    
-    
-    # new_state_dict = OrderedDict()
-    # for k, v in state_dict.items():
-    #     # Remove the prefix from the key
-    #     new_key = k.replace('_orig_mod.', '')
-    #     new_state_dict[new_key] = v
-    
-    # model.load_state_dict(new_state_dict)
-    
-    
     criterion = nn.MSELoss()
     mae_criterion = nn.L1Loss()
     outsideFivePercent = 0
@@ -74,6 +61,11 @@ def eval_model(model, modelName, graph=False):
         ss_tot = torch.sum((y_test - y_mean) ** 2)
         ss_res = torch.sum((y_test - y_pred) ** 2)
         r2 = 1 - ss_res / ss_tot
+        
+        # Calculate RMSE and then CV error (expressed in percentage)
+        rmse = torch.sqrt(loss)
+        cv_error = (rmse / y_mean) * 100
+
         
         for i in range(X_test.shape[0]):
             actualRow = y_test[i].item()
@@ -98,15 +90,18 @@ def eval_model(model, modelName, graph=False):
     print(str(loss.item()) + " is the MSE")
     print(str(r2.item()) + " is the r^2")
     print(str(mae_loss.item()) + " is the MAE")
+    print(f"{cv_error.item()} is the CV error")
     model.train()
     
     if graph:
         plot_actual_vs_predicted(y_test, y_pred)
         
     lines = [
-        f"Model: {modelName}"
-        f"R^2: {r2.item()}.\n",
-        f"MSE: {loss.item()}.\n",
+        f"Model: {modelName}\n",
+        f"MSE: {loss.item()}\n",
+        f"R^2: {r2.item()}\n",
+        f"MAE: {mae_loss.item()}\n",
+        f"CV: {cv_error.item()}\n"
     ]
     
     with open(f"results/{modelName}.txt", "w") as file:
@@ -120,4 +115,3 @@ def eval_model(model, modelName, graph=False):
     del X_train, X_test, y_train, y_test, model, criterion, y_pred
     torch.cuda.empty_cache()
     gc.collect()
-
