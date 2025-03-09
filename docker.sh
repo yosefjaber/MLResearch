@@ -1,0 +1,1 @@
+pip install matplotlib==3.7.1 numpy==1.24.3 pandas
