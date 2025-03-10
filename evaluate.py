@@ -41,8 +41,8 @@ def eval_model(model, model_name, graph=False):
     y_test  = torch.FloatTensor(y_test.values).to(device)
     
     model = model.to(device)
-    model = torch.compile(model)
     model.load_state_dict(torch.load(f"models/{model_name}.pt"))
+    model = torch.compile(model)
     
     criterion = nn.MSELoss()
     mae_criterion = nn.L1Loss()

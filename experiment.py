@@ -5,7 +5,7 @@ import torch.nn.functional as F
 from evaluate import eval_model, eval_model_no_name
 from train_model import train_model
 from create_model import create_model
-from experiment_helper import extract_mse_from_file, write_lines, get_count_from_file
+from experiment_helper import increment_count_in_file, extract_mse_from_file, write_lines, get_count_from_file
 import gc
 
 SMALL_EPOCHS = 100
@@ -91,11 +91,17 @@ def run_experiment(model_name, model, learning_rate, optimizer, epochs):
     """Run a single experiment with the given parameters."""
     # Check if the experiment has already been run
     if(get_count_from_file(f"results/{model_name}.txt") == -1):
+        #File dosent exist
         count = 0
+    elif(get_count_from_file(f"results/{model_name}.txt") == -10):
+        #Weird Error
+        print("ERROR IN GET COUNT FROM FILE")
+        return
     else:
+        #Get count from function
         count = get_count_from_file(f"results/{model_name}.txt")
         
-    if count > 3:
+    if count >= 3:
         print(f"Experiment {model_name} has been conducted {count} times, skipping.")
         return
     
@@ -105,23 +111,27 @@ def run_experiment(model_name, model, learning_rate, optimizer, epochs):
     print(f"  Epochs: {epochs}")
     print(f"  Count: {count}")
     
-    trained_model = train_model(model, learning_rate, optimizer, epochs, f"{model_name}.pt")
+    trained_model = train_model(model, learning_rate, optimizer, epochs, f"{model_name}")
     data = eval_model_no_name(trained_model, f"{model_name}", False)
+    original_MSE = extract_mse_from_file(f"results/{model_name}.txt")
     
-    if extract_mse_from_file(f"results/{model_name}") != -1:
-        original_MSE = extract_mse_from_file(f"results/{model_name}")
+    if count == 0:
+        print("First Model Pass")
+        write_lines(data["model_name"], data["mse"], data["r2"], data["mae"], data["cv"], count+1)
+        torch.save(trained_model.state_dict(), f"models/{model_name}") #dont add .pt here
+    else:
+        print(model_name)
         new_MSE = data["mse"]
-        
+            
         if original_MSE > new_MSE:
             print(f"Original MSE: {original_MSE}, New MSE: {new_MSE}, replacing Original with New")
             write_lines(data["model_name"], data["mse"], data["r2"], data["mae"], data["cv"], count+1)
-            torch.save(trained_model, f"models/{model_name}.pt")
+            torch.save(trained_model.state_dict(), f"models/{model_name}") #dont add .pt here
         else:
             print(f"Original MSE: {original_MSE}, New MSE: {new_MSE}, keeping original")
-    else:
-        print("First Model Pass")
-        write_lines(data["model_name"], data["mse"], data["r2"], data["mae"], data["cv"], count+1)
-        torch.save(trained_model, f"models/{model_name}.pt")
+            increment_count_in_file(f"results/{model_name}.txt")
+    
+    
     
     
     gc.collect()
