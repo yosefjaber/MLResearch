@@ -2,3 +2,4 @@ venv
 .ropeproject
 __pycache__/
 models/
+tarikModel3-512-58.pt
