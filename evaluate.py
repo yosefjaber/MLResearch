@@ -33,12 +33,11 @@ def eval_model(model, model_name, graph=False):
     X_test = pd.read_csv("data/X_test.csv")
     y_train = pd.read_csv("data/y_train.csv")
     y_test = pd.read_csv("data/y_test.csv")
-    
-    #Convert X and y features to float tensors
-    X_train = torch.FloatTensor(X_train.values).to(device)
-    X_test  = torch.FloatTensor(X_test.values).to(device)
-    y_train = torch.FloatTensor(y_train.values).to(device)
-    y_test  = torch.FloatTensor(y_test.values).to(device)
+
+    X_train = torch.FloatTensor(X_train.values)
+    X_test = torch.FloatTensor(X_test.values)
+    y_train = torch.FloatTensor(y_train.values)
+    y_test = torch.FloatTensor(y_test.values)
     
     model = model.to(device)
     model.load_state_dict(torch.load(f"models/{model_name}.pt"))

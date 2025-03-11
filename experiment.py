@@ -7,12 +7,13 @@ from train_model import train_model
 from create_model import create_model
 from experiment_helper import increment_count_in_file, extract_mse_from_file, write_lines, get_count_from_file
 import gc
+import pandas as pd
 
 SMALL_EPOCHS = 100
 MEDIUM_EPOCHS = 250
 LARGE_EPOCHS = 500
 
-EPOCHS = [10,SMALL_EPOCHS, MEDIUM_EPOCHS, LARGE_EPOCHS]
+EPOCHS = [SMALL_EPOCHS, MEDIUM_EPOCHS, LARGE_EPOCHS]
 
 # Small models (5 layers)
 SMALL_LAYERS_LEFT_PYRAMID = create_model(4, [64, 128, 192, 256, 320], 1)
@@ -62,32 +63,7 @@ OPTIMIZERS = ["Adam", "AdamW"]
 
 LEARNING_RATES = [0.001, 0.0005,0.0001,0.00005]
 
-# Create dictionaries for easier iteration
-MODEL_CONFIGS = {
-    "small": {
-        "left_pyramid": SMALL_LAYERS_LEFT_PYRAMID,
-        "right_pyramid": SMALL_LAYERS_RIGHT_PYRAMID,
-        "diamond": SMALL_LAYERS_DIAMOND,
-        "block": SMALL_LAYERS_BLOCK,
-        "epochs": SMALL_EPOCHS
-    },
-    "medium": {
-        "left_pyramid": MEDIUM_LAYERS_LEFT_PYRAMID,
-        "right_pyramid": MEDIUM_LAYERS_RIGHT_PYRAMID,
-        "diamond": MEDIUM_LAYERS_DIAMOND,
-        "block": MEDIUM_LAYERS_BLOCK,
-        "epochs": MEDIUM_EPOCHS
-    },
-    "large": {
-        "left_pyramid": LARGE_LAYERS_LEFT_PYRAMID,
-        "right_pyramid": LARGE_LAYERS_RIGHT_PYRAMID,
-        "diamond": LARGE_LAYERS_DIAMOND,
-        "block": LARGE_LAYERS_BLOCK,
-        "epochs": LARGE_EPOCHS
-    }
-}
-
-def run_experiment(model_name, model, learning_rate, optimizer, epochs):
+def run_experiment(model_name, model, learning_rate, optimizer, epochs, batch_size=32):
     """Run a single experiment with the given parameters."""
     # Check if the experiment has already been run
     if(get_count_from_file(f"results/{model_name}.txt") == -1):
@@ -111,7 +87,7 @@ def run_experiment(model_name, model, learning_rate, optimizer, epochs):
     print(f"  Epochs: {epochs}")
     print(f"  Count: {count}")
     
-    trained_model = train_model(model, learning_rate, optimizer, epochs, f"{model_name}")
+    trained_model = train_model(model, learning_rate, optimizer, epochs, f"{model_name}", batch_size=batch_size)
     data = eval_model_no_name(trained_model, f"{model_name}", False)
     original_MSE = extract_mse_from_file(f"results/{model_name}.txt")
     
@@ -144,6 +120,7 @@ def run_all_experiments():
             for learning_rate in LEARNING_RATES:
                 for optimizer in OPTIMIZERS:
                     run_experiment(f"{model}_{epoch}_{learning_rate}_{optimizer}.pt", MODELS[model], learning_rate, optimizer, epoch)
+                    torch.cuda.empty_cache()
 
 def count_parameters(model):
     """Count the number of trainable parameters in a model."""
@@ -151,3 +128,6 @@ def count_parameters(model):
 
 if __name__ == "__main__":
     run_all_experiments()
+    
+    # run_experiment(f"troll.pt", MODELS["small_layers_left_pyramid"], 0.00005, "AdamW", 99999999)
+    # run_experiment(f"troll.pt", MEDIUM_LAYERS_BLOCK, 0.00005, "AdamW", 99999999)

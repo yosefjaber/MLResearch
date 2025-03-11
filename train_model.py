@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 from torch.optim import SGD, Adam, AdamW
 import gc
 
-def train_model(model, learning_rate, optimizer, epochs, out_path, batch_size=32, momentum=0.9):
+def train_model(model, learning_rate, optimizer, epochs, out_path, batch_size=10000, momentum=0.9):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print("Using device:", device)
     torch.set_float32_matmul_precision("high")
@@ -24,9 +24,13 @@ def train_model(model, learning_rate, optimizer, epochs, out_path, batch_size=32
     y_test = torch.FloatTensor(y_test.values)
 
     train_dataset = torch.utils.data.TensorDataset(X_train, y_train)
-    train_loader = torch.utils.data.DataLoader(dataset=train_dataset, 
-                                               batch_size=batch_size, 
-                                               shuffle=True)
+    train_loader = torch.utils.data.DataLoader(
+        dataset=train_dataset,
+        batch_size=batch_size,
+        shuffle=True,
+        num_workers=12,          # Start with 4; tune upward/downward
+        pin_memory=True         # Helps speed up host-to-device transfers
+    )
 
     model = model.to(device)
     print("Model pushed to " + str(device))
