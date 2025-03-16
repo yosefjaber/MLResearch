@@ -28,6 +28,7 @@ def eval_model(model, model_name, graph=False):
     #Use GPU if available 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print("Using device:", device)
+    torch.set_float32_matmul_precision('high')
     
     X_train = pd.read_csv("data/X_train.csv")
     X_test = pd.read_csv("data/X_test.csv")
@@ -41,7 +42,6 @@ def eval_model(model, model_name, graph=False):
     
     model = model.to(device)
     model.load_state_dict(torch.load(f"models/{model_name}.pt"))
-    model = torch.compile(model)
     
     criterion = nn.MSELoss()
     mae_criterion = nn.L1Loss()
@@ -131,7 +131,6 @@ def eval_model_no_name(model, model_name, graph=False):
     y_test  = torch.FloatTensor(y_test.values).to(device)
     
     model = model.to(device)
-    model = torch.compile(model)
     # model.load_state_dict(torch.load(f"models/{model_name}.pt"))
     
     criterion = nn.MSELoss()

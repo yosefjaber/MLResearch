@@ -33,6 +33,7 @@ def train_model(model, learning_rate, optimizer, epochs, out_path, batch_size=10
     )
 
     model = model.to(device)
+    model = torch.compile(model)
     print("Model pushed to " + str(device))
 
     criterion = nn.MSELoss()
