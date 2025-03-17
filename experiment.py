@@ -66,6 +66,7 @@ LEARNING_RATES = [0.001, 0.0005,0.0001,0.00005]
 def run_experiment(model_name, model, learning_rate, optimizer, epochs, batch_size=32):
     """Run a single experiment with the given parameters."""
     # Check if the experiment has already been run
+    torch.set_float32_matmul_precision('high')
     if(get_count_from_file(f"results/{model_name}.txt") == -1):
         #File dosent exist
         count = 0
