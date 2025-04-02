@@ -13,7 +13,7 @@ from auto_trainer import auto_train_model
 
 test = create_model(4,[2048 for i in range(18)],1)
 
-trained_model = auto_train_model(test, 1e-8, "AdamW", 0.3, "test.pt",  batch_size=32)
+trained_model = auto_train_model(test, 1e-8, "AdamW", 0.3, "test.pt",  batch_size=5000)
 data = eval_model_no_name(trained_model, "test.pt", False)
 original_MSE = extract_mse_from_file("test.pt.txt")
 count = 0
