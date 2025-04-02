@@ -1,5 +1,6 @@
 import os.path
 import torch
+torch.set_float32_matmul_precision('high')
 import torch.nn as nn
 import torch.nn.functional as F
 from evaluate import eval_model, eval_model_no_name
